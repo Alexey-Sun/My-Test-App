@@ -1,0 +1,73 @@
+/* 
+    Created on : 29 серп. 2015, 13:05:01
+    Author     : Alexey
+*/
+
+body {
+    overflow-y: scroll; // Prevent "jumps" of centered content
+}
+
+.content {
+    //text-align: center;
+    padding-top: 60px;
+    margin: 0px auto;
+    width: 1000px;
+    min-width: 360px;
+}
+
+.font-large {
+    font-size: large;
+}
+
+.div-hidden {
+    display: none;
+}
+
+.cell-hidden {
+    display: table-cell;
+}
+
+.menu-hidden {
+    display: none;
+}
+
+.input-invalid {
+    border-color: #f15928;
+    box-shadow: 0 0 8px rgba(241, 89, 40, 0.2);
+}
+
+#menu-default {
+    display: block;
+}
+
+#menu-icons {
+    display: none;
+}
+
+/* Scale content width on displays < 1000px wide */
+@media screen and (max-width: 1000px) {
+    .content {
+        width: 100%;
+        padding-left: 5px;
+        padding-right: 5px;
+    }   
+    
+    .font-large {
+        font-size: larger;
+    }
+}
+
+/* Replace menu with smaller one and hide some table cells */
+@media screen and (max-width: 768px) {
+    .cell-hidden {
+        display: none;
+    }
+    
+    #menu-default {
+        display: none;
+    }
+    
+    #menu-icons {
+        display: block;
+    }
+}

@@ -1,0 +1,109 @@
+<div id="form" class="col-xs-10 col-xs-offset-1 col-md-6 col-md-offset-2 div-hidden">
+  <form class="form-horizontal" action="">
+      <div class="form-group">                            
+          <label class="col-xs-2 col-xs-offset-5 col-sm-offset-6">Customer</label>                            
+      </div>
+
+      <div class="form-group">   
+          <label for="user-name" class="col-xs-12 col-sm-2 control-label">Name</label>
+          <div class="col-xs-12 col-sm-10">
+              <input id="user-name"
+                     type="text" 
+                     maxlength="25"
+                     placeholder="Name"
+                     class="form-control"
+                     required>
+          </div>
+      </div>   
+
+      <div class="form-group">   
+          <label for="user-email" class="col-xs-12 col-sm-2 control-label">Email</label>
+          <div class="col-xs-12 col-sm-10">
+              <input id="user-email" 
+                     type="email" 
+                     placeholder="Email"
+                     class="form-control"
+                     required>
+          </div>
+      </div> 
+
+      <div class="form-group">   
+          <label for="user-phone" class="col-xs-12 col-sm-2 control-label">Phone</label>
+          <div class="col-xs-12 col-sm-10">
+              <input id="user-phone"
+                     type="text" 
+                     pattern="\d{3}[-]\d{2}[-]\d{2}"
+                     placeholder="???-??-??"
+                     class="form-control"
+                     required>
+          </div>
+      </div>
+
+      <div class="form-group">                            
+          <label class="col-xs-2 col-xs-offset-5 col-sm-offset-6">Address</label>                            
+      </div>
+
+      <div class="form-group">   
+          <label for="user-street" class="col-xs-12 col-sm-2 control-label">Street</label>
+          <div class="col-xs-12 col-sm-10">
+              <input id="user-street"
+                     type="text" 
+                     maxlength="100"
+                     placeholder="Street"
+                     class="form-control">
+          </div>
+      </div>
+
+      <div class="form-group">   
+          <label for="user-city" class="col-xs-12 col-sm-2 control-label">City</label>
+          <div class="col-xs-12 col-sm-10">
+              <input id="user-city"
+                     type="text" 
+                     maxlength="100"
+                     placeholder="City"
+                     class="form-control">
+          </div>
+      </div>
+
+      <div class="form-group">   
+          <label for="user-state" class="col-xs-12 col-sm-2 control-label">State</label>
+          <div class="col-xs-12 col-sm-10">
+              <input id="user-state"
+                     type="text" 
+                     maxlength="100"
+                     placeholder="State"
+                     class="form-control">
+          </div>
+      </div>
+
+      <div class="form-group">   
+          <label for="user-zip" class="col-xs-12 col-sm-2 control-label">Zip</label>
+          <div class="col-xs-12 col-sm-10">
+              <input id="user-zip"
+                     type="text" 
+                     pattern="\d{5}"
+                     placeholder="?????"
+                     class="form-control">
+          </div>
+      </div>
+
+      <div id="create-button-group" class="form-group">
+          <div class="col-xs-6 col-sm-5 col-sm-offset-2">
+              <button id="btn-submit" type="button" class="btn-submit btn btn-lg btn-info btn-block">Submit</button>                                
+          </div>
+          <div class="col-xs-6 col-sm-5">
+              <button id="btn-cancel" type="button" class="btn-cancel btn btn-lg btn-danger btn-block">Cancel</button>                                
+          </div>
+      </div>
+
+      <div id="update-button-group" class="form-group div-hidden">
+        <div class="row">
+          <div class="btn-group btn-group-lg btn-group-justified" role="group">
+              <a id="btn-update" class="btn-update btn btn-lg btn-info">Update</a> 
+              <a id="btn-remove" class="btn-remove btn btn-lg btn-danger">Delete</a> 
+              <a id="btn-cancel" class="btn-cancel btn btn-lg btn-warning">Cancel</a>                                
+          </div>
+        </div>
+      </div>
+  </form>
+</div>
