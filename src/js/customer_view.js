@@ -35,15 +35,19 @@ function CustomerView() {
                 confirm: "confirm"
             }
         },
-        /* Map attributes to form inputs */
+        /* Map attributes to form input id`s */
         input: {
             name:   "user-name",
-            email:  "user-email",
+            email:  "user-email",            
             phone:  "user-phone",
             street: "user-street",
             city:   "user-city",
             state:  "user-state",
-            zip :   "user-zip"
+            zip :   "user-zip",
+        },
+        /* Map extra attributes to HTML id`s */
+        util: {
+            key: "email-original"
         },
         /* Maps divs to html files */
         map: {
@@ -90,8 +94,7 @@ CustomerView.prototype.configure = function(config) {
 
 /*
  * Load required HTML files in provided div
- * Loaded HTML elements are hidden by default 
- * @param {string} div
+ * Loaded HTML elements are hidden by default
  */
 CustomerView.prototype.init = function() {
     var f = this.setEventHandlers.bind(this);
@@ -117,16 +120,18 @@ CustomerView.prototype.init = function() {
     $.when.apply($, deffereds).done(function(){
         f();
     });
-    
 };
 
+/*
+ * Set event handlers for control elements
+ */
 CustomerView.prototype.setEventHandlers = function() {
     /* Add Button */
     var a = this.showDiv.bind(this, this.config.divs.content.form);
     var config = this.config;
     $("." + this.config.buttons.add).each(function(index, data) {
         $(data).on("click", function() {
-            /* Reset CSS */
+            /* Reset CSS and form */
             for(var i in config.input) {                
                 $("#" + config.input[i]).removeClass("input-invalid");                                                   
             }
@@ -161,11 +166,7 @@ CustomerView.prototype.setEventHandlers = function() {
             b();
         });         
     });
-            
-    document.getElementById(this.config.buttons.cancel).addEventListener("click", function() {
-        b();
-    });    
-    
+
     /* About Button */
     var c = this.showDiv.bind(this, this.config.divs.content.about);
     $("." + this.config.buttons.about).each(function(index, data) {
@@ -180,7 +181,7 @@ CustomerView.prototype.setEventHandlers = function() {
         for(var i in config.input) {                
             $("#" + config.input[i]).removeClass("input-invalid");                                                   
         }
-        d();        
+        d(config.input.email);        
     });
     
     /* Submit Button */
@@ -206,12 +207,12 @@ CustomerView.prototype.setEventHandlers = function() {
         if(result === true) {
             g();                        
         }
-    });    
-    
+    });
 };
 
-
-/* Put items in table */
+/* 
+ * Put customer records in table 
+ */
 CustomerView.prototype.drawTable = function() {
     this.showDiv(this.config.divs.content.table);  
     
@@ -221,8 +222,7 @@ CustomerView.prototype.drawTable = function() {
     var items = this.control.getAllItems();     
     
     for(var i = 0; i < items.length; i++) {
-        var tableEntry = document.createElement("tr");
-        
+        var tableEntry = document.createElement("tr");        
         
         /* Add row number */
         var index = document.createElement("td");
@@ -241,30 +241,33 @@ CustomerView.prototype.drawTable = function() {
             tableEntry.appendChild(tableCell);
         }
         
-        //Add event listener
-        var a = this.updateItem.bind(this);    
+        /* Add event listener */
+        var updateItem = this.updateItem.bind(this);    
         var c = this.config.fields.indexOf("email");        
         
         tableEntry.addEventListener("click", function() {   
             /* This points to table row! 
              * Add +1 to account for first index column */
-            a(this.getElementsByTagName("td")[c + 1].innerHTML);            
+            updateItem(this.getElementsByTagName("td")[c + 1].innerHTML);            
         });
         
         tableBody.appendChild(tableEntry);
     }  
 };
 
+/*
+ * Validate input fields
+ * @returns {Array|NodeList} - array of invalid inputs
+ */
 CustomerView.prototype.validate = function() {
     var invalidFields = [];
     invalidFields = document.querySelectorAll("input:invalid");
-
     return invalidFields;
 };
 
 /* 
  * Create new item from input form 
- * @param {boolean} update
+ * @param {boolean} update - create or update record
  * If update is true, rewrite record
  */
 CustomerView.prototype.addItem = function(update) {
@@ -290,9 +293,12 @@ CustomerView.prototype.addItem = function(update) {
 
         if(update !== true && this.control.getItem(customer.email) !== null) {
             alert("Item already exists!");
+            return;
         } else {
             if(update === true) {
-                this.control.updateItem(customer.email, customer);  
+                var key = document.getElementById(this.config.util.key).value;
+                console.log(key);
+                this.control.updateItem(key, customer);  
             } else {
                 this.control.saveItem(customer);                  
             }
@@ -303,13 +309,15 @@ CustomerView.prototype.addItem = function(update) {
     } else {
         for(var i = 0; i < fields.length; i++) {
             $(fields[i]).addClass("input-invalid");        
-        }
-        //TODO: Add warning       
+        }     
     }
 };
 
+/*
+ * Remove record based on primary key
+ */
 CustomerView.prototype.deleteItem = function() {
-    var key = document.getElementById(this.config.input.email).value;
+    var key = document.getElementById(this.config.util.key).value;
     this.control.removeItem(key);
     this.drawTable();
 };
@@ -336,15 +344,33 @@ CustomerView.prototype.showDiv = function(div) {
  * @param {string} key - Customer`s email
  */
 CustomerView.prototype.updateItem = function(key) {    
-    /* Activate different buttons for form */
+    /* Activate different buttons for update form */
     this.showDiv(this.config.divs.content.form);
     $("#" + this.config.divs.content.create).addClass("div-hidden");
     $("#" + this.config.divs.content.update).removeClass("div-hidden");
+    
+    var config = this.config;
+    for(var i in config.input) {                
+        $("#" + config.input[i]).removeClass("input-invalid");                                                   
+    }
 
+    /* Fill input fields */
     var item = Customer.prototype.fromJSON(this.control.getItem(key));
     var j = 0;
     for(var i in this.config.input) {
         document.getElementById(this.config.input[i]).value 
                 = item.getValueByString(this.config.fields[j++]);        
     }
+    
+    /* Reset and add hidden field with original email value */
+    var hidden;
+    hidden = document.getElementById(this.config.util.key);
+    if(hidden !== null) {
+        hidden.remove();
+    }            
+    hidden = document.createElement("input");
+    hidden.id = this.config.util.key;
+    hidden.type = "hidden";
+    hidden.value = item.email;
+    document.getElementById(this.config.divs.content.form).appendChild(hidden);
 };

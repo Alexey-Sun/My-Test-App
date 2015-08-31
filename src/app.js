@@ -1,8 +1,8 @@
 /* 
  * Application Class
  */
-
 function Application() {
+    
     /* View Objects */
     this.views = {
         customer: null

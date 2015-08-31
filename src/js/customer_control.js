@@ -35,20 +35,17 @@ CustomerControl.prototype.removeItem = function(key) {
 
 /* 
  * Update item in local storage 
- * @param {type} key
- * @param {type} item
+ * @param {string} key - record key in local storage
+ * @param {Customer} item - customer
  */
 CustomerControl.prototype.updateItem = function(key, item) {
-    if(item.email !== key) {
-        throw "Keys do not match! (Update Item)";
-    }
     this.removeItem(key);
     this.saveItem(item);
 };
 
 /* 
  * Save item in local storage, use email as primary key 
- * @param {Customer} item
+ * @param {Customer} item - customer
  */
 CustomerControl.prototype.saveItem = function(item) {
     if(!(item instanceof Customer)) {
